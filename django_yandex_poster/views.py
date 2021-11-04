@@ -21,4 +21,4 @@ def place_by_id(request, pk):
                   'description_short': place.description_short,
                   'description_long': place.description_long,
                   'coordinates': place.coordinates}
-    return JsonResponse(place_dict, json_dumps_params={'ensure_ascii': False})
+    return JsonResponse(place_dict, json_dumps_params={'ensure_ascii': False, 'indent': 2})
