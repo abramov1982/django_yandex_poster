@@ -1,4 +1,4 @@
-from .models import PlaceCoord
+from .models import PlaceCoord, Place
 
 
 def make_geojson():

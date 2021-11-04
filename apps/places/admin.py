@@ -28,4 +28,4 @@ class PlaceAdmin(admin.ModelAdmin):
 @admin.register(PlaceCoord)
 class PlaceCoordAdmin(admin.ModelAdmin):
     list_display = ['title', 'placeId']
-
+    exclude = ('detailsUrl',)

@@ -1,5 +1,6 @@
 from django.db import models
 
+from tinymce.models import HTMLField
 
 # Create your models here.
 
@@ -7,7 +8,7 @@ from django.db import models
 class Place(models.Model):
     title = models.CharField(max_length=200, blank=False, verbose_name='Название')
     description_short = models.TextField(blank=False, verbose_name='Краткое описание')
-    description_long = models.TextField(blank=False, verbose_name='Полное описание')
+    description_long = HTMLField(blank=False, verbose_name='Полное описание')
     coordinates = models.JSONField(blank=False, verbose_name='координаты места')
 
     def __str__(self):
@@ -42,7 +43,9 @@ class PlaceCoord(models.Model):
     longitude = models.FloatField(blank=False, null=True, verbose_name='Долгота')
     title = models.CharField(max_length=200, unique=True, blank=False, verbose_name='Описание')
     placeId = models.CharField(max_length=200, unique=True, blank=False, verbose_name='ID места')
-    detailsUrl = models.URLField(blank=False, verbose_name='URL детального описания места')
+    place = models.ForeignKey(Place, blank=False, on_delete=models.CASCADE, related_name='place_coord',
+                              verbose_name='Место')
+    detailsUrl = models.CharField(max_length=200, blank=False, verbose_name='URL детального описания места')
 
     def __str__(self):
         return self.title
@@ -52,3 +55,7 @@ class PlaceCoord(models.Model):
         verbose_name_plural = 'Координаты мест'
         app_label = 'places'
         db_table = 'place_coord'
+
+    def save(self, *args, **kwargs):
+        self.detailsUrl = f'/places/{self.place.pk}'
+        super().save(*args, **kwargs)

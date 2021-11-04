@@ -15,7 +15,7 @@ def index(request):
 
 def place_by_id(request, pk):
     place = get_object_or_404(Place, pk=pk)
-    images = [image.image.path for image in Image.objects.filter(place_id=pk)]
+    images = [image.image.url for image in Image.objects.filter(place_id=pk)]
     place_dict = {'title': place.title,
                   'imgs': images,
                   'description_short': place.description_short,
