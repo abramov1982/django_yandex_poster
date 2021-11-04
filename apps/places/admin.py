@@ -4,9 +4,15 @@ from .models import *
 # Register your models here.
 
 
+class ImageInline(admin.TabularInline):
+    model = Image
+
+
 @admin.register(Place)
 class PlaceAdmin(admin.ModelAdmin):
-    pass
+    inlines = [
+        ImageInline
+    ]
 
 
 @admin.register(Image)
@@ -19,3 +25,4 @@ class ImageAdmin(admin.ModelAdmin):
 @admin.register(PlaceCoord)
 class PlaceCoordAdmin(admin.ModelAdmin):
     list_display = ['title', 'placeId']
+
