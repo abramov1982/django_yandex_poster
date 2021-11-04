@@ -21,9 +21,10 @@ class Place(models.Model):
 
 
 class Image(models.Model):
-    place = models.ForeignKey(Place, on_delete=models.CASCADE, related_name='image', verbose_name='Изображение места')
+    place = models.ForeignKey(Place, on_delete=models.CASCADE, related_name='place', verbose_name='Изображение места')
     image = models.ImageField(upload_to='places/images', verbose_name='Изображение')
-    number = models.PositiveSmallIntegerField(blank=False, verbose_name='Порядковый номер при отображении')
+    position = models.PositiveIntegerField(default=0, blank=False, null=False,
+                                           verbose_name='Порядковый номер при отображении')
 
     def __str__(self):
         return self.place.title
@@ -31,9 +32,9 @@ class Image(models.Model):
     class Meta:
         verbose_name = 'Изображение'
         verbose_name_plural = 'Изображения'
-        unique_together = ('place', 'number',)
         app_label = 'places'
         db_table = 'images'
+        ordering = ['position']
 
 
 class PlaceCoord(models.Model):
