@@ -1,7 +1,5 @@
 from django.db import models
 
-from django_yandex_poster.settings import MEDIA_ROOT
-
 
 # Create your models here.
 

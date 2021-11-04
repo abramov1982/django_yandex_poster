@@ -22,7 +22,8 @@ from django_yandex_poster import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name='index')
+    path('', views.index, name='index'),
+    path('places/<int:pk>/', views.place_by_id, name='place_by_id')
     ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
