@@ -12,5 +12,10 @@ class PlaceAdmin(admin.ModelAdmin):
 @admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):
     list_filter = ['place']
-    list_display = ['id', 'place']
-    ordering = ('id', 'place',)
+    list_display = ['number', 'place']
+    ordering = ('number', 'place',)
+
+
+@admin.register(PlaceCoord)
+class PlaceCoordAdmin(admin.ModelAdmin):
+    list_display = ['title', 'placeId']
