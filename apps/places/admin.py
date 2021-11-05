@@ -23,6 +23,7 @@ class PlaceAdmin(admin.ModelAdmin):
     inlines = [
         ImageInline
     ]
+    search_fields = ['place_coord__title']
 
 
 @admin.register(PlaceCoord)
