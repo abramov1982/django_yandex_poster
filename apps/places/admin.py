@@ -23,10 +23,5 @@ class PlaceAdmin(admin.ModelAdmin):
     inlines = [
         ImageInline
     ]
-    search_fields = ['place_coord__title']
+    search_fields = ['title']
 
-
-@admin.register(PlaceCoord)
-class PlaceCoordAdmin(admin.ModelAdmin):
-    list_display = ['title', 'placeId']
-    exclude = ('detailsUrl',)

@@ -5,7 +5,7 @@ services:
     container_name: yandex_poster
     image: abramovio/devman_1week_yandex_poster:latest
     restart: always
-    command: gunicorn test_traffic_light.wsgi:application --bind 0.0.0.0:8000
+    command: sh -c "python manage.py load_place && gunicorn django_yandex_poster.wsgi:application --bind 0.0.0.0:8000"
     environment:
       - STAGE=176.119.159.88
     volumes:

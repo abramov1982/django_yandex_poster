@@ -1,19 +1,18 @@
-from .models import PlaceCoord, Place
+from .models import Place
 
 
 def make_geojson():
     geojson = {"type": "FeatureCollection", "features": []}
-    places = PlaceCoord.objects.all()
+    places = Place.objects.all()
     for place in places:
         place_dict = {"type": "Feature",
                       "geometry": {
                           "type": "Point",
-                          "coordinates": [place.latitude, place.longitude]
+                          "coordinates": [place.longitude, place.latitude]
                         },
                       "properties": {
                           "title": place.title,
-                          "placeId": place.placeId,
-                          "detailsUrl": place.detailsUrl
+                          "detailsUrl": f'places/{place.pk}'
                         }
                       }
         geojson["features"].append(place_dict)

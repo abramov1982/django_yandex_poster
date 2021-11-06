@@ -6,10 +6,11 @@ from tinymce.models import HTMLField
 
 
 class Place(models.Model):
-    title = models.CharField(max_length=200, blank=False, verbose_name='Название')
+    title = models.CharField(max_length=200, blank=False, unique=True, verbose_name='Название')
     description_short = models.TextField(blank=False, verbose_name='Краткое описание')
     description_long = HTMLField(blank=False, verbose_name='Полное описание')
-    coordinates = models.JSONField(blank=False, verbose_name='координаты места')
+    latitude = models.FloatField(blank=False, null=True, verbose_name='Широта')
+    longitude = models.FloatField(blank=False, null=True, verbose_name='Долгота')
 
     def __str__(self):
         return self.title
@@ -36,26 +37,3 @@ class Image(models.Model):
         app_label = 'places'
         db_table = 'images'
         ordering = ['position']
-
-
-class PlaceCoord(models.Model):
-    latitude = models.FloatField(blank=False, null=True, verbose_name='Широта')
-    longitude = models.FloatField(blank=False, null=True, verbose_name='Долгота')
-    title = models.CharField(max_length=200, unique=True, blank=False, verbose_name='Описание')
-    placeId = models.CharField(max_length=200, unique=True, blank=False, verbose_name='ID места')
-    place = models.ForeignKey(Place, blank=False, on_delete=models.CASCADE, related_name='place_coord',
-                              verbose_name='Место')
-    detailsUrl = models.CharField(max_length=200, blank=False, verbose_name='URL детального описания места')
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = 'Координаты места'
-        verbose_name_plural = 'Координаты мест'
-        app_label = 'places'
-        db_table = 'place_coord'
-
-    def save(self, *args, **kwargs):
-        self.detailsUrl = f'/places/{self.place.pk}'
-        super().save(*args, **kwargs)
