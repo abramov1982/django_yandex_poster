@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+from environs import Env
+
+env = Env()
+env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-o@e7f_d*(+)io3*!3-=8m0anvunyik1rc-rw)y7lq&90tpnduh'
+SECRET_KEY = env.str('SECRET_KEY', default='default_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DEBUG', default=True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost', '[::1]'])
 
 
 # Application definition
@@ -57,8 +61,7 @@ ROOT_URLCONF = 'django_yandex_poster.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -124,7 +127,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-
 # Media files (application images, etc)
 
 MEDIA_URL = '/media/'
@@ -136,10 +138,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+# staticfiles settings for deploy
+
 if os.getenv('DEPLOY'):
-    SECRET_KEY = os.getenv('SECRET_KEY')
-    DEBUG = False
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-    ALLOWED_HOSTS.append(os.getenv('STAGE'))
 else:
     STATICFILES_DIRS = [BASE_DIR, 'static']

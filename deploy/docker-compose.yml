@@ -5,10 +5,11 @@ services:
     container_name: yandex_poster
     image: abramovio/devman_1week_yandex_poster:latest
     restart: always
-    command: sh -c "python manage.py load_place && gunicorn django_yandex_poster.wsgi:application --bind 0.0.0.0:8000"
+    command: gunicorn django_yandex_poster.wsgi:application --bind 0.0.0.0:8000
     environment:
-      - STAGE=176.119.159.88
+      - ALLOWED_HOSTS={your_server_ip_address}, {another ip address}
+      - SECRET_KEY={your_secret_key}
     volumes:
       - ./media:/yandex_poster/media
     ports:
-      - 8000:8000
+      - '8000:8000'
