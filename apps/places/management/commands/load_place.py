@@ -1,9 +1,8 @@
 import requests
 from PIL import Image as IMG
 from io import BytesIO
-from django.core.files import File
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from apps.places.models import Place, Image
 
 
