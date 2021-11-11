@@ -4,7 +4,7 @@ from django.utils.safestring import mark_safe
 
 from adminsortable2.admin import SortableInlineAdminMixin
 
-from .models import *
+from .models import Image, Place
 
 
 # Register your models here.
