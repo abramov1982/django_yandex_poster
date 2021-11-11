@@ -16,11 +16,11 @@ def index(request):
 def place_by_id(request, pk):
     place = get_object_or_404(Place, pk=pk)
     images = [place.image.url for place in Image.objects.filter(place_id=pk)]
-    place_dict = {'title': place.title,
+    place_info = {'title': place.title,
                   'imgs': images,
                   'description_short': place.description_short,
                   'description_long': place.description_long,
                   'coordinates': {'lat': place.latitude, 'lng': place.longitude}
                   }
-    return JsonResponse(place_dict, json_dumps_params={'ensure_ascii': False, 'indent': 2})
+    return JsonResponse(place_info, json_dumps_params={'ensure_ascii': False, 'indent': 2})
 
