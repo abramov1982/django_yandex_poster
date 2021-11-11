@@ -3,12 +3,13 @@ version: '3'
 services:
   web:
     container_name: yandex_poster
-    image: abramovio/devman_1week_yandex_poster:latest
+    image: {your docker hub repo}/{container_name}:{tag}
     restart: always
     command: gunicorn django_yandex_poster.wsgi:application --bind 0.0.0.0:8000
     environment:
-      - ALLOWED_HOSTS={your_server_ip_address}, {another ip address}
+      - ALLOWED_HOSTS={your_server_ip_address}
       - SECRET_KEY={your_secret_key}
+      - DEBUG={True of False}
     volumes:
       - ./media:/yandex_poster/media
     ports:

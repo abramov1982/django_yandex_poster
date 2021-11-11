@@ -1,26 +1,63 @@
-<h1>Проект "Интересные места"</h1>
-<hr>
-<h3>Ссылка на развёрнутый сайт - <a href="http://176.119.159.88/">"Интересные места"</a></h3>
-<h3>Ссылка на сайта - <a href="http://176.119.159.88/admin">"Админка"</a></h3>
+# Проект "Интересные места"</h1>
+***
+Ссылка на развёрнутый сайт - ["Интересные места"](http://176.119.159.88/) 
+***
+Ссылка на админку сайта - ["Админка"](http://176.119.159.88/admin)
+***
+Проект представляет собой интерактивную карту с набором интересных мест и мероприятий, с их описанием и фотографиями.
 
-<p>Проект представляет собой интерактивную карту с набором интересных мест и мероприятий, с их описанием и фотографиями.</p>
-
-<p>Проект учебный и создавался в рамках обучения, а не как коммерческий продукт.</p>
+Проект учебный и создавался в рамках обучения, а не как коммерческий продукт.
 
 
-<h3>Разработка</h5>
-<h4>Подготовка проекта к разработке</h4>
-<p>В корневом каталоге выполнить команду "pip install -r requirements.txt" для установки пакетов использующихся в проекте</p>
-<p>Запуск проекта осуществляется командой "python manage.py runserver"</p>
+###Разработка
+####Подготовка проекта к разработке
+- Для установки пакетов использующихся в проекте в корневом каталоге выполнить команду ```pip install -r requirements.txt``` 
+- Запуск проекта осуществляется командой ```python manage.py runserver```
 
-<h3>Разворачивание проекта</h5>
-<h4>Проект упакован в Docker контейнер</h4>
-<h4>Подготовка контейнера</h4>
-<p>Сборка контейнера - "docker build -f Dockerfile -t abramovio/devman_1week_yandex_poster:latest ."</p>
-<p>Заливка контейнера на Dockerhub - "docker push abramovio/devman_1week_yandex_poster:latest"</p>
-<h4>Запуск проекта на сервере</h4>
-<p>В папке deploy лежит пример файла docker-compose.yml для запуска проекта.</p>
-<p>В файле необходимо будет поменять параметр "STAGE". Параметру необходимо присвоить значение IP адреса на котором будет запущен проект.</p>
-<p>Так же в папке шде будет лежать docker-compose.yml необходимо создать каталог "media" для хранения фотографий</p>
-<h4>Запуск контейнера</h4>
-<p>Запуск контейнера производится командой "sudo docker-compose up -d"</p>
+###Разворачивание проекта
+Проект упакован в Docker контейнер  
+
+__Подготовка контейнера__  
+ - Сборка контейнера - ```docker build -f Dockerfile -t {your docker hub repo}/{container_name}:{tag} .```
+   - ```{your docker hub repo}``` - имя Вашего репозитория на докер хаб
+   - ```{container_name}``` - имя образа
+   - ```{tag}``` - тег(версия) образа
+ - Заливка контейнера на Dockerhub - ```docker push {your docker hub repo}/{container_name}:{tag}```
+
+###Запуск проекта на сервере
+В папке ```deploy``` лежит пример файла ```docker-compose.yml``` для запуска проекта.
+
+__Переменные ```docker-compose.yml```__
+```
+version: '3'
+
+services:
+  web:
+    container_name: {container_name}
+    image: {your docker hub repo}/{container_name}:{tag}
+    restart: always
+    command: gunicorn django_yandex_poster.wsgi:application --bind 0.0.0.0:8000
+    environment:
+      - ALLOWED_HOSTS={your_server_ip_address}
+      - SECRET_KEY={your_secret_key}
+      - DEBUG={True of False}
+    volumes:
+      - ./media:/yandex_poster/media
+    ports:
+      - '8000:8000'
+```
+ - ```{container_name}``` - Имя контейнера которое будет отображаться при выполнении команды ```sudo docker ps```
+ - ```{your docker hub repo}/{container_name}:{tag}``` - полное название образа (см. Подготовка контейнера)
+ - ```ALLOWED_HOSTS={your_server_ip_address}``` - IP адрес сервера на котором запускается сервис
+ - ```SECRET_KEY={your_secret_key}``` - ключ Django для шифрования
+ - ```DEBUG={True of False}``` - режим отладки (True - включен, False - выключен)
+
+На сервере, в папке где будет распологаться ```docker-compose.yml``` необходимо создать каталог "media" для хранения фотографий ```sudo mkdir media```
+
+Запуск контейнера - ```sudo docker-compose up -d```  
+
+Создание пользователя для доступа к админке сервиса - ```sudo docker exec -ti {container_name} sh -c "python manage.py createsuperuser"```  
+
+Загрузка данных в БД  - ```sudo docker exec -ti {container_name} sh -c "python manage.py load_place"```
+
+После запуска проект будет доступен на 8000 порту
