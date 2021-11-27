@@ -1,9 +1,9 @@
 # Проект "Интересные места"</h1>
-***
+
 Ссылка на развёрнутый сайт - ["Интересные места"](http://176.119.159.88/) 
-***
+
 Ссылка на админку сайта - ["Админка"](http://176.119.159.88/admin)
-***
+
 Проект представляет собой интерактивную карту с набором интересных мест и мероприятий, с их описанием и фотографиями.
 
 Проект учебный и создавался в рамках обучения, а не как коммерческий продукт.
@@ -14,20 +14,21 @@
 - Для установки пакетов использующихся в проекте в корневом каталоге выполнить команду ```pip install -r requirements.txt``` 
 - Запуск проекта осуществляется командой ```python manage.py runserver```
 
-### Разворачивание проекта
+### Подготовка проекта к разворачиванию на сервере
 Проект упакован в Docker контейнер  
 
-__Подготовка контейнера__  
+#### Подготовка контейнера  
  - Сборка контейнера - ```docker build -f Dockerfile -t {your docker hub repo}/{container_name}:{tag} .```
    - ```{your docker hub repo}``` - имя Вашего репозитория на докер хаб
    - ```{container_name}``` - имя образа
    - ```{tag}``` - тег(версия) образа
  - Заливка контейнера на Dockerhub - ```docker push {your docker hub repo}/{container_name}:{tag}```
 
-### Запуск проекта на сервере
+#### Подготовка переменных окружения
+
 В папке ```deploy``` лежит пример файла ```docker-compose.yml``` для запуска проекта.
 
-__Переменные ```docker-compose.yml```__
+Переменные ```docker-compose.yml```
 ```
 version: '3'
 
@@ -52,12 +53,15 @@ services:
  - ```SECRET_KEY={your_secret_key}``` - ключ Django для шифрования
  - ```DEBUG={True of False}``` - режим отладки (True - включен, False - выключен)
 
-На сервере, в папке где будет распологаться ```docker-compose.yml``` необходимо создать каталог "media" для хранения фотографий ```sudo mkdir media```
 
-Запуск контейнера - ```sudo docker-compose up -d```  
+На сервере, в папке где будет располагаться ```docker-compose.yml``` необходимо создать каталог "media" для хранения фотографий ```sudo mkdir media```
 
-Создание пользователя для доступа к админке сервиса - ```sudo docker exec -ti {container_name} sh -c "python manage.py createsuperuser"```  
+### Запуск проекта на сервере
 
-Загрузка данных в БД  - ```sudo docker exec -ti {container_name} sh -c "python manage.py load_place"```
+ - Запуск контейнера - ```sudo docker-compose up -d```  
+
+ - Создание пользователя для доступа к админке сервиса - ```sudo docker exec -ti {container_name} sh -c "python manage.py createsuperuser"```  
+
+ - Загрузка данных в БД  - ```sudo docker exec -ti {container_name} sh -c "python manage.py load_place"```
 
 После запуска проект будет доступен на 8000 порту
