@@ -18,8 +18,8 @@ class Command(BaseCommand):
         raw_url = 'https://raw.githubusercontent.com/devmanorg/where-to-go-places/master/'
         place_files = requests.get(repo_url)
         place_files.raise_for_status()
-        files_serialize = place_files.json()
-        for file in files_serialize['tree']:
+        serialized_files = place_files.json()
+        for file in serialized_files['tree']:
             filename = urlparse(unquote(file['path'])).path
             if not filename[-4:] == 'json':
                 continue
