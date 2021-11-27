@@ -17,17 +17,14 @@ class Command(BaseCommand):
         repo_url = 'https://api.github.com/repos/devmanorg/where-to-go-places/git/trees/master?recursive=1'
         raw_url = 'https://raw.githubusercontent.com/devmanorg/where-to-go-places/master/'
         place_files = requests.get(repo_url)
-        if not place_files.status_code == 200:
-            return "Can't get files"
+        place_files.raise_for_status()
         files_serialize = place_files.json()
         for file in files_serialize['tree']:
             filename = urlparse(unquote(file['path'])).path
             if not filename[-4:] == 'json':
                 continue
             place_raw = requests.get(raw_url + file['path'])
-            if not place_raw.status_code == 200:
-                print("Can't load json file")
-                continue
+            place_raw.raise_for_status()
             place_serialize = place_raw.json()
             place, created = Place.objects.get_or_create(
                 title__iexact=place_serialize['title'],
@@ -43,9 +40,7 @@ class Command(BaseCommand):
             place.save()
             print(f'{place_serialize["title"]} was save')
             for image_url in place_serialize['imgs']:
-                if not requests.get(image_url).status_code == 200:
-                    print(f"Can't load image by {image_url} url")
-                    continue
+                requests.get(image_url).raise_for_status()
                 image_data = IMG.open(BytesIO(requests.get(image_url).content))
                 image_name = urlparse(unquote(image_url)).path.split('/')[-1]
                 image_data.save(f'./media/places/images/{image_name}')
