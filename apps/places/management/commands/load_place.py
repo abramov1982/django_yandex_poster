@@ -37,7 +37,6 @@ class Command(BaseCommand):
                           'longitude': place_serialize['coordinates']['lng'],
                           }
             )
-            place.save()
             print(f'{place_serialize["title"]} was save')
             for image_url in place_serialize['imgs']:
                 requests.get(image_url).raise_for_status()
@@ -46,6 +45,5 @@ class Command(BaseCommand):
                 image_data.save(f'./media/places/images/{image_name}')
                 image, created = Image.objects.get_or_create(place=Place.objects.get(pk=place.pk),
                                                              image=f'places/images/{image_name}')
-                image.save()
                 print(f'Image {image_name} for {place.title} was save')
         print('Load Places and Images complete')
