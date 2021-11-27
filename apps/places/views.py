@@ -16,7 +16,6 @@ def index(request):
 def place_by_id(request, pk):
     place = get_object_or_404(Place, pk=pk)
     images = [place.image.url for place in place.images.all()]
-    print(images)
     place_info = {'title': place.title,
                   'imgs': images,
                   'description_short': place.description_short,
