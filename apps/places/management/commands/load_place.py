@@ -1,3 +1,4 @@
+import os
 import posixpath
 
 import requests
@@ -21,7 +22,7 @@ class Command(BaseCommand):
         serialized_files = place_files.json()
         for file in serialized_files['tree']:
             filename = urlparse(unquote(file['path'])).path
-            if not filename[-4:] == 'json':
+            if not os.path.splitext(filename)[1] == '.json':
                 continue
             place_raw = requests.get(raw_url + file['path'])
             place_raw.raise_for_status()
