@@ -17,16 +17,16 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         repo_url = 'https://api.github.com/repos/devmanorg/where-to-go-places/git/trees/master?recursive=1'
         raw_url = 'https://raw.githubusercontent.com/devmanorg/where-to-go-places/master/'
-        place_files = requests.get(repo_url)
-        place_files.raise_for_status()
-        serialized_files = place_files.json()
+        place_files_request = requests.get(repo_url)
+        place_files_request.raise_for_status()
+        serialized_files = place_files_request.json()
         for file in serialized_files['tree']:
             filename = urlparse(unquote(file['path'])).path
             if not os.path.splitext(filename)[1] == '.json':
                 continue
-            place_raw = requests.get(raw_url + file['path'])
-            place_raw.raise_for_status()
-            place_serialize = place_raw.json()
+            place_raw_request = requests.get(raw_url + file['path'])
+            place_raw_request.raise_for_status()
+            place_serialize = place_raw_request.json()
             place, created = Place.objects.get_or_create(
                 title__iexact=place_serialize['title'],
                 latitude=place_serialize['coordinates']['lat'],
