@@ -42,9 +42,9 @@ class Command(BaseCommand):
             for image_url in place_serialized['imgs']:
                 image_response = requests.get(image_url)
                 image_response.raise_for_status()
-                image_data = IMG.open(BytesIO(image_response.content))
+                image = IMG.open(BytesIO(image_response.content))
                 image_name = urlparse(unquote(image_url)).path.split('/')[-1]
-                image_data.save(f'./media/places/images/{image_name}')
+                image.save(f'./media/places/images/{image_name}')
                 image, created = Image.objects.get_or_create(place=Place.objects.get(pk=place.pk),
                                                              image=f'places/images/{image_name}')
                 print(f'Image {image_name} for {place.title} was saved')
